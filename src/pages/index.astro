@@ -1,5 +1,9 @@
 ---
+import "../styles/global.css";
+import Nav from '../components/nav.astro';
+import Block from  '../components/block.astro';
 
+import Editor from "../react/editor.jsx";
 ---
 
 <html lang="en">
@@ -11,7 +15,12 @@
 		<meta name="generator" content={Astro.generator} />
     <title>Sparkplug B Encoder / Decoder</title>
 	</head>
-	<body>
-    <h1>Online Sparkplug B encoder / decoder</h1>
+	<body class="bg-neutral-900 text-white">
+    <Nav></Nav>
+    <div class="mx-auto max-w-7xl my-8 sm:px-6 lg:px-8">
+      <Block suppressHydrationWarning={true}>
+        <Editor client:load/>
+      </Block>
+    </div>
 	</body>
 </html>
