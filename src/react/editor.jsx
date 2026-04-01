@@ -6,6 +6,7 @@ import * as sparkplugB from '@jcoreio/sparkplug-payload/spBv1.0';
 import { useState } from "react";
 
 import DecoderBase64 from "./decoder-base-64";
+import DecoderFile from "./decoder-file";
 
 const defaultCode =
   `{
@@ -68,7 +69,7 @@ export default function Editor() {
   }
 
 
-  return (<div className="flex gap-4">
+  return (<div className="flex-col lg:flex-row flex gap-8 lg:gap-4">
     <div className="flex-1 flex flex-col gap-4">
       <h3 className="text-center text-xl">
         Encoder
@@ -95,6 +96,7 @@ export default function Editor() {
     </div>
     <div className="flex-1 flex flex-col gap-4">
       <DecoderBase64 />
+      <DecoderFile />
     </div>
   </div>)
 }
