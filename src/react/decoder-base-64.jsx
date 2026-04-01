@@ -1,11 +1,13 @@
 import CodeMirror from "@uiw/react-codemirror";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import * as sparkplugB from '@jcoreio/sparkplug-payload/spBv1.0';
 
 const defaultValue = 'CO/J9rHUMxIZCgp0ZXN0LXZhbHVlIAo4AGkAAAAAAABZQA==';
+
+const localStorageKey = 'base64.value';
 
 function base64ToArrayBuffer(base64) {
   const binaryString = atob(base64);
@@ -24,11 +26,18 @@ export default function DecoderBase64() {
   const [baseValue, setBaseValue] = useState(defaultValue);
   const [err, setErr] = useState(false);
   const [success, setSucess] = useState(false);
+
+  useEffect(() => {
+    const cached = window.localStorage.getItem(localStorageKey);
+    if (cached) setBaseValue(cached);
+  }, []);
+
   const decode = () => {
     try {
       const binary = base64ToArrayBuffer(baseValue);
       const decoded = sparkplugB.decodePayload(binary);
       setErr(false);
+      window.localStorage.setItem(localStorageKey, baseValue);
       return JSON.stringify(decoded, (_, value) =>
         typeof value === 'bigint' ? Number(value) : value
       );;

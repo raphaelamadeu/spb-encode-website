@@ -2,8 +2,9 @@ import CodeMirror from "@uiw/react-codemirror";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { javascript } from '@codemirror/lang-javascript';
 import * as sparkplugB from '@jcoreio/sparkplug-payload/spBv1.0';
+import JSON5 from 'json5';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import DecoderBase64 from "./decoder-base-64";
 import DecoderFile from "./decoder-file";
@@ -19,11 +20,17 @@ const defaultCode =
 }
 `;
 
+const localStorageKey = 'editor.value';
+
 export default function Editor() {
   const [code, setCode] = useState(defaultCode);
-  const [baseValue, setBaseValue] = useState('');
   const [err, setErr] = useState(false);
   const [success, setSucess] = useState(false);
+
+  useEffect(() => {
+    const cached = window.localStorage.getItem(localStorageKey);
+    if (cached) setCode(cached);
+  }, [])
 
   const onChange = (i) => {
     setCode(i);
@@ -31,12 +38,14 @@ export default function Editor() {
 
   const encode = () => {
     try {
-      const codified = new Function(`return (${code})`)();
-      const encoded = sparkplugB.encodePayload(codified);
+      const json = JSON5.parse(code);
+      const encoded = sparkplugB.encodePayload(json);
       setErr(false);
+      window.localStorage.setItem(localStorageKey, code);
       return encoded;
 
     } catch (err) {
+      console.log(err)
       setErr(true);
       return false;
     }
