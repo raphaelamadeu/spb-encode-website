@@ -1,7 +1,9 @@
 import CodeMirror from "@uiw/react-codemirror";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { javascript } from '@codemirror/lang-javascript';
+import { json as jsonLang } from '@codemirror/lang-json';
 import * as sparkplugB from '@jcoreio/sparkplug-payload/spBv1.0';
+import { EditorView } from "@codemirror/view";
 import JSON5 from 'json5';
 
 import { useEffect, useState } from "react";
@@ -120,7 +122,7 @@ export default function Editor() {
             <h3 className="text-center text-xl">
               Decoded viewer
             </h3>
-            <CodeMirror maxWidth="100%" height="500px" theme={vscodeDark} value={decodedCode} extensions={[javascript({ jsx: true })]} />
+            <CodeMirror height="500px" theme={vscodeDark} value={decodedCode} extensions={[jsonLang(), EditorView.lineWrapping]} />
           </div>
         </div>
       </>}

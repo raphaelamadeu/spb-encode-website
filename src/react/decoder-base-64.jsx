@@ -1,5 +1,6 @@
 import CodeMirror from "@uiw/react-codemirror";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
+import { EditorView } from "@codemirror/view";
 
 import { useEffect, useState } from "react";
 
@@ -81,7 +82,7 @@ export default function DecoderBase64({ setDecodedCode }) {
       <h3 className="text-center text-xl">
         Decode Base64
       </h3>
-      <CodeMirror height="64px" theme={vscodeDark} value={baseValue} onChange={(i) => { setBaseValue(i) }} />
+      <CodeMirror height="64px" extensions={[EditorView.lineWrapping]} theme={vscodeDark} value={baseValue} onChange={(i) => { setBaseValue(i) }} />
       {err && (
         <p className="text-red-400">
           Could not decode payload
