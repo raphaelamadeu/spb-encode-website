@@ -26,6 +26,7 @@ export default function Editor() {
   const [code, setCode] = useState(defaultCode);
   const [err, setErr] = useState(false);
   const [success, setSucess] = useState(false);
+  const [decodedCode, setDecodedCode] = useState('');
 
   useEffect(() => {
     const cached = window.localStorage.getItem(localStorageKey);
@@ -78,34 +79,50 @@ export default function Editor() {
   }
 
 
-  return (<div className="flex-col lg:flex-row flex gap-8 lg:gap-4">
-    <div className="flex-1 flex flex-col gap-4">
-      <h3 className="text-center text-xl">
-        Encoder
-      </h3>
-      <CodeMirror height="500px" theme={vscodeDark} value={code} extensions={[javascript({ jsx: true })]} onChange={onChange} />
-      {err && (
-        <p className="text-red-400">
-          Could not encode invalid JS Object
-        </p>
-      )}
-      {success && (
-        <p className="text-green-400">
-          Encoded payload copied to clipboard
-        </p>
-      )}
-      <div className="flex justify-start gap-4">
-        <button className="cursor-pointer bg-green-900 px-4 py-2 rounded-2xl shadow-lg" onClick={onClickCopy}>
-          Copy encoded Base64
-        </button>
-        <button className="cursor-pointer bg-orange-800 px-4 py-2 rounded-2xl shadow-lg" onClick={onClickDownload}>
-          Download encoded Binary
-        </button>
+  return (
+    <>
+      <div className="flex-col lg:flex-row flex gap-8 lg:gap-4">
+        <div className="flex-1 flex flex-col gap-4">
+          <h3 className="text-center text-xl">
+            Encoder
+          </h3>
+          <CodeMirror height="500px" theme={vscodeDark} value={code} extensions={[javascript({ jsx: true })]} onChange={onChange} />
+          {err && (
+            <p className="text-red-400">
+              Could not encode invalid JS Object
+            </p>
+          )}
+          {success && (
+            <p className="text-green-400">
+              Encoded payload copied to clipboard
+            </p>
+          )}
+          <div className="flex justify-start gap-4">
+            <button className="cursor-pointer bg-green-900 px-4 py-2 rounded-2xl shadow-lg" onClick={onClickCopy}>
+              Copy encoded Base64
+            </button>
+            <button className="cursor-pointer bg-orange-800 px-4 py-2 rounded-2xl shadow-lg" onClick={onClickDownload}>
+              Download encoded Binary
+            </button>
+          </div>
+        </div>
+        <div className="flex-1 flex flex-col gap-4">
+          <DecoderBase64 setDecodedCode={setDecodedCode} />
+          <DecoderFile setDecodedCode={setDecodedCode} />
+        </div>
       </div>
-    </div>
-    <div className="flex-1 flex flex-col gap-4">
-      <DecoderBase64 />
-      <DecoderFile />
-    </div>
-  </div>)
+
+      {decodedCode && <>
+        <hr className="opacity-60 my-8" />
+
+        <div className="flex-col lg:flex-row flex gap-8 lg:gap-4">
+          <div className="flex-1 flex flex-col gap-4">
+            <h3 className="text-center text-xl">
+              Decoded viewer
+            </h3>
+            <CodeMirror height="500px" theme={vscodeDark} value={decodedCode} extensions={[javascript({ jsx: true })]} />
+          </div>
+        </div>
+      </>}
+    </>)
 }

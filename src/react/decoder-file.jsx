@@ -20,7 +20,7 @@ function base64ToArrayBuffer(base64) {
   return bytes;
 }
 
-export default function DecoderFile() {
+export default function DecoderFile({ setDecodedCode }) {
   const [binary, setBinary] = useState(defaultValue);
   const [err, setErr] = useState(false);
   const [success, setSucess] = useState(false);
@@ -48,6 +48,7 @@ export default function DecoderFile() {
         setSucess(false);
       }, 3000);
       navigator.clipboard.writeText(res);
+      setDecodedCode(res);
     }
   }
 
