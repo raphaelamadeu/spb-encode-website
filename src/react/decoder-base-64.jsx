@@ -95,7 +95,7 @@ export default function DecoderBase64({ setDecodedCode }) {
       )}
       <div className="flex justify-start gap-4">
         <button className="cursor-pointer bg-green-900 px-4 py-2 rounded-2xl shadow-lg" onClick={onClickCopy}>
-          Copy decoded payload
+          Decoded payload
         </button>
         <button className="cursor-pointer bg-orange-800 px-4 py-2 rounded-2xl shadow-lg" onClick={onClickDownload}>
           Download decoded payload
