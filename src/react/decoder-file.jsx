@@ -29,9 +29,11 @@ export default function DecoderFile({ setDecodedCode }) {
     try {
       const decoded = sparkplugB.decodePayload(binary);
       setErr(false);
-      return JSON.stringify(decoded, (_, value) =>
+      const final = JSON.stringify(decoded, (_, value) =>
         typeof value === 'bigint' ? Number(value) : value
       );;
+
+      return JSON.stringify(JSON.parse(final), null, 2);
 
     } catch (err) {
       console.log(err)

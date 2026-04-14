@@ -39,9 +39,11 @@ export default function DecoderBase64({ setDecodedCode }) {
       const decoded = sparkplugB.decodePayload(binary);
       setErr(false);
       window.localStorage.setItem(localStorageKey, baseValue);
-      return JSON.stringify(decoded, (_, value) =>
+      const final = JSON.stringify(decoded, (_, value) =>
         typeof value === 'bigint' ? Number(value) : value
       );;
+
+      return JSON.stringify(JSON.parse(final), null, 2);
 
     } catch (err) {
       console.log(err)
