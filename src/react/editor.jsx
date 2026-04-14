@@ -6,7 +6,7 @@ import * as sparkplugB from '@jcoreio/sparkplug-payload/spBv1.0';
 import { EditorView } from "@codemirror/view";
 import JSON5 from 'json5';
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import DecoderBase64 from "./decoder-base-64";
 import DecoderFile from "./decoder-file";
@@ -24,11 +24,32 @@ const defaultCode =
 
 const localStorageKey = 'editor.value';
 
+function formatJSON(editor, value) {
+  try {
+    const formatted = JSON.stringify(JSON.parse(value), null, 2);
+
+    editor.dispatch({
+      changes: {
+        from: 0,
+        to: editor.state.doc.length,
+        insert: formatted,
+      },
+    });
+  } catch (e) {
+    console.error("JSON inválido");
+  }
+}
+
 export default function Editor() {
   const [code, setCode] = useState(defaultCode);
   const [err, setErr] = useState(false);
   const [success, setSucess] = useState(false);
   const [decodedCode, setDecodedCode] = useState('');
+  const viewRef = useRef(null);
+
+  useEffect(() => {
+    formatJSON(viewRef.current, decodedCode)
+  }, [decodedCode, viewRef])
 
   useEffect(() => {
     const cached = window.localStorage.getItem(localStorageKey);
@@ -109,8 +130,14 @@ export default function Editor() {
           </div>
         </div>
         <div className="flex-1 flex flex-col gap-4">
-          <DecoderBase64 setDecodedCode={setDecodedCode} />
-          <DecoderFile setDecodedCode={setDecodedCode} />
+          <DecoderBase64 setDecodedCode={(value) => {
+            setDecodedCode(value);
+            formatJSON(viewRef, value)
+          }} />
+          <DecoderFile setDecodedCode={(value) => {
+            setDecodedCode(value);
+            formatJSON(viewRef, value)
+          }} />
         </div>
       </div>
 
@@ -122,7 +149,7 @@ export default function Editor() {
             <h3 className="text-center text-xl">
               Decoded viewer
             </h3>
-            <CodeMirror height="500px" theme={vscodeDark} value={decodedCode} extensions={[jsonLang(), EditorView.lineWrapping]} />
+            <CodeMirror value={`${JSON.stringify(JSON.parse(decodedCode), null, 2)}`} height="500px" theme={vscodeDark} extensions={[jsonLang(), EditorView.lineWrapping]} />
           </div>
         </div>
       </>}
