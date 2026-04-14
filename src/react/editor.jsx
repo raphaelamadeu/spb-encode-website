@@ -86,7 +86,7 @@ export default function Editor() {
           <h3 className="text-center text-xl">
             Encoder
           </h3>
-          <CodeMirror height="500px" theme={vscodeDark} value={code} extensions={[javascript({ jsx: true })]} onChange={onChange} />
+          <CodeMirror maxWidth="100%" height="500px" theme={vscodeDark} value={code} extensions={[javascript({ jsx: true })]} onChange={onChange} />
           {err && (
             <p className="text-red-400">
               Could not encode invalid JS Object
@@ -120,7 +120,7 @@ export default function Editor() {
             <h3 className="text-center text-xl">
               Decoded viewer
             </h3>
-            <CodeMirror height="500px" theme={vscodeDark} value={decodedCode} extensions={[javascript({ jsx: true })]} />
+            <CodeMirror maxWidth="100%" height="500px" theme={vscodeDark} value={decodedCode} extensions={[javascript({ jsx: true })]} />
           </div>
         </div>
       </>}
