@@ -16,7 +16,7 @@ export default defineConfig({
         manifest: {
           name: 'spB Encode',
           short_name: 'spB',
-          description: 'Sparkplug B Payload Encoder & Decoder',
+          description: 'Sparkplug B Payload Encoder & Decoder - Online Tool',
           theme_color: '#2f0d68',
           background_color: '#2f0d68',
           display: 'standalone',
